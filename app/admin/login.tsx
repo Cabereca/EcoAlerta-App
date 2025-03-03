@@ -33,7 +33,10 @@ export default function AdminLogin() {
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
+
       const res = await api.post('/employeeLogin', data);
+
+      console.log(data);
 
       toast.show({
         id: Math.random().toString(),
@@ -50,9 +53,14 @@ export default function AdminLogin() {
             </Toast>
           )
         },
-      })
+      });
 
-      login(res.data);
+      const { token, ...user } = res.data;
+
+      console.log(token);
+
+
+      login(user, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({

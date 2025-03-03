@@ -20,11 +20,17 @@ api.defaults.headers = {
 // Adding Authorization header for all requests
 api.interceptors.request.use(
   async (config) => {
-    const token = await storage.load({key: 'token'});
-    if (token) {
-      config.headers!['Authorization'] = `Bearer ${token}`;
+    console.log('interceptor');
+    try {
+      const token = await storage.load({key: 'token'});
+      if (token) {
+        config.headers!['Authorization'] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return config;
     }
-    return config;
   },
   (error) => {
     return Promise.reject(error);

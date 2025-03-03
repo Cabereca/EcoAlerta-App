@@ -1,5 +1,6 @@
 import { Employee } from '@/@types/Employee';
 import storage from '@/storage/init';
+import { router } from 'expo-router';
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 
 interface AdminContextType {
@@ -22,6 +23,7 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
     await storage.save({ key: 'user', data: user });
     await storage.save({ key: 'token', data: token });
     await storage.save({ key: 'isAdmin', data: true });
+    router.push('/admin')
   };
 
   const logout = () => {
@@ -34,7 +36,6 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   useEffect(() => {
     (async () => {
       const user = await storage.load<Employee>({ key: 'user' });
-      const isAdmin = await storage.load<boolean>({ key: 'isAdmin' });
       const token = await storage.load<string>({ key: 'token' });
 
       if (user && token) {

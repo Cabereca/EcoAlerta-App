@@ -4,7 +4,7 @@ export type Occurrence = {
   id: string
   title: string
   description: string
-  status: string
+  status: "OPEN", "IN_PROGRESS", "CLOSED"
   feedback?: string
   dateTime: Date
   created_at: Date
