@@ -1,38 +1,25 @@
 import { Employee } from '@/@types/Employee';
-import { User } from '@/@types/User';
-import api from '@/services/api';
 import storage from '@/storage/init';
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 
 interface AdminContextType {
-  user: Employee | User | null;
+  user: Employee | null;
   isAdmin: boolean;
-  login: (email: string, password: string) => void,
+  login: (user: Employee) => void,
   logout: () => void,
   setIsAdmin: (isAdmin: boolean) => void;
 }
 
-export const AdminContext = createContext<AdminContextType>({
-  user: null,
-  isAdmin: false,
-  setIsAdmin: () => {},
-  login: () => {},
-  logout: () => {}
-});
+export const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [user, setUser] = useState<Employee | User | null>(null);
+  const [user, setUser] = useState<Employee | null>(null);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const res = await api.post("/employeeLogin", {email, password});
-
-      console.log(res);
-
-    } catch (error) {
-      console.log(error)
-    }
+  const login = async (user: Employee) => {
+    setIsAdmin(true);
+    setUser(user);
+    await storage
   };
 
   const logout = () => {
