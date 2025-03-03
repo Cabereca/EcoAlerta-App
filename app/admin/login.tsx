@@ -60,7 +60,7 @@ export default function AdminLogin() {
       console.log(token);
 
 
-      login(user, token);
+      login({...user}, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({

@@ -17,10 +17,10 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<Employee | null>(null);
 
-  const login = async (user: Employee, token: string) => {
+  const login = async (user: {user: Employee}, token: string) => {
     setIsAdmin(true);
-    setUser(user);
-    await storage.save({ key: 'user', data: user });
+    setUser(user.user);
+    await storage.save({ key: 'user', data: user.user });
     await storage.save({ key: 'token', data: token });
     await storage.save({ key: 'isAdmin', data: true });
     router.push('/admin')
