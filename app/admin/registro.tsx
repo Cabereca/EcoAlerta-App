@@ -56,9 +56,11 @@ export default function AdminRegistro() {
             </Toast>
           )
         },
-      })
+      });
 
-      login(res.data);
+      const {token, user} = res.data;
+
+      login(user, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({

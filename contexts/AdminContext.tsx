@@ -5,7 +5,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 interface AdminContextType {
   user: Employee | null;
   isAdmin: boolean;
-  login: (user: Employee) => void,
+  login: (user: Employee, token: string) => void,
   logout: () => void,
   setIsAdmin: (isAdmin: boolean) => void;
 }
@@ -16,22 +16,30 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<Employee | null>(null);
 
-  const login = async (user: Employee) => {
+  const login = async (user: Employee, token: string) => {
     setIsAdmin(true);
     setUser(user);
-    await storage
+    await storage.save({ key: 'user', data: user });
+    await storage.save({ key: 'token', data: token });
+    await storage.save({ key: 'isAdmin', data: true });
   };
 
   const logout = () => {
-    // Implement logout logic here
+    setIsAdmin(false);
+    setUser(null);
+    storage.remove({ key: 'user' });
+    storage.remove({ key: 'token' });
   };
 
   useEffect(() => {
     (async () => {
       const user = await storage.load<Employee>({ key: 'user' });
+      const isAdmin = await storage.load<boolean>({ key: 'isAdmin' });
+      const token = await storage.load<string>({ key: 'token' });
 
-      if (user) {
+      if (user && token) {
         setUser(user);
+        setIsAdmin(true);
       }
 
       return;
