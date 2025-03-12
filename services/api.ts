@@ -10,7 +10,7 @@ type headers = {
 
 const api = axios.create();
 
-api.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://10.0.2.2:3000';
+api.defaults.baseURL = process.env.API_URL || 'http://10.0.2.2:3000';
 
 api.defaults.headers = {
   'Content-Type': 'application/json',
@@ -20,7 +20,6 @@ api.defaults.headers = {
 // Adding Authorization header for all requests
 api.interceptors.request.use(
   async (config) => {
-    console.log('interceptor');
     try {
       const token = await storage.load({key: 'token'});
       if (token) {

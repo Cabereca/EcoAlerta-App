@@ -6,7 +6,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 interface AdminContextType {
   user: Employee | null;
   isAdmin: boolean;
-  login: (user: Employee, token: string) => void,
+  login: (user: {user: Employee}, token: string) => void,
   logout: () => void,
   setIsAdmin: (isAdmin: boolean) => void;
 }
@@ -23,7 +23,7 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
     await storage.save({ key: 'user', data: user.user });
     await storage.save({ key: 'token', data: token });
     await storage.save({ key: 'isAdmin', data: true });
-    router.push('/admin')
+    router.navigate('/admin');
   };
 
   const logout = () => {
