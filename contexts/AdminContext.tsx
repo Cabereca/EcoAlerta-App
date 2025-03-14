@@ -6,7 +6,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 interface AdminContextType {
   user: Employee | null;
   isAdmin: boolean;
-  login: (user: {user: Employee}, token: string) => void,
+  login: (user: Employee, token: string) => void,
   logout: () => void,
   setIsAdmin: (isAdmin: boolean) => void;
 }
@@ -16,11 +16,13 @@ export const AdminContext = createContext<AdminContextType | undefined>(undefine
 export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<Employee | null>(null);
+  const [token, setToken] = useState<string | null>(null)
 
-  const login = async (user: {user: Employee}, token: string) => {
+  const login = async (user: Employee, token: string) => {
     setIsAdmin(true);
-    setUser(user.user);
-    await storage.save({ key: 'user', data: user.user });
+    setUser(user);
+    setToken(token)
+    await storage.save({ key: 'user', data: user });
     await storage.save({ key: 'token', data: token });
     await storage.save({ key: 'isAdmin', data: true });
     router.navigate('/admin');
@@ -29,6 +31,7 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
   const logout = () => {
     setIsAdmin(false);
     setUser(null);
+    setToken(null);
     storage.remove({ key: 'user' });
     storage.remove({ key: 'token' });
   };
@@ -41,6 +44,7 @@ export const AdminProvider = ({ children }: PropsWithChildren<{}>) => {
       if (user && token) {
         setUser(user);
         setIsAdmin(true);
+        setToken(token);
       }
 
       return;

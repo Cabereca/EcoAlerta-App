@@ -40,9 +40,6 @@ export default function AdminRegistro() {
     try {
       const res = await api.post('/employee', data);
 
-      console.log(res.data);
-
-
       toast.show({
         id: Math.random().toString(),
         placement: "top right",
@@ -60,9 +57,9 @@ export default function AdminRegistro() {
         },
       });
 
-      const {token, user} = res.data;
+      const {token, employee} = res.data;
 
-      login(user, token);
+      login(employee, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({

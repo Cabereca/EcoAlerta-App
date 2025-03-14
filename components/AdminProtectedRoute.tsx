@@ -11,6 +11,8 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
       return;
     }
+
+    <Redirect href="/admin" />
   }, [])
   return <>{children}</>;
 };
