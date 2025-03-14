@@ -13,16 +13,19 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: PropsWithChildren<{}>) => {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   const login = async (user: { user: User }, token: string) => {
     setUser(user.user);
+    setToken(token);
     await storage.save({ key: 'user', data: user });
     await storage.save({ key: 'token', data: token });
-    router.push('/user/home');
+    router.navigate('/user/home');
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     storage.remove({ key: 'user' });
     storage.remove({ key: 'token' });
   };
@@ -34,10 +37,10 @@ export const UserProvider = ({ children }: PropsWithChildren<{}>) => {
 
       if (user && token)
         setUser(user);
-
+        setToken(token);
       return;
     })()
-  }, [])
+  }, [user, token])
 
   return (
     <UserContext.Provider value={{ user, login, logout }}>

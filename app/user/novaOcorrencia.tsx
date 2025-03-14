@@ -84,7 +84,7 @@ export default function NewOccurrenceScreen() {
         render: ({ id }) => {
           const uniqueToastId = "toast-" + id
           return (
-            <Toast nativeID={uniqueToastId} action="warning" variant="solid">
+            <Toast nativeID={uniqueToastId} action="success" variant="solid">
               <ToastTitle>Denúnia efetuada com sucesso!</ToastTitle>
               <ToastDescription>
                 Sua denúncia foi enviada com sucesso e será analisada.
@@ -95,7 +95,7 @@ export default function NewOccurrenceScreen() {
       })
       navigation.goBack()
     } catch (error: any) {
-      console.error(error.response.data.message)
+      console.error(error.message)
       toast.show({
         id: Math.random().toString(),
         placement: "top right",

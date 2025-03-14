@@ -35,7 +35,7 @@ export default function UserRegistro() {
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-      const res = await api.post('/user', data);
+      const res = await api.post('/users', data);
 
       toast.show({
         id: Math.random().toString(),
@@ -56,7 +56,7 @@ export default function UserRegistro() {
 
       const {token, user} = res.data;
 
-      login({...user}, token);
+      login(user, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({
