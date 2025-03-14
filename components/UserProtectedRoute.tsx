@@ -6,11 +6,15 @@ const UserProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUserAuth();
 
   useEffect(() => {
+    console.log(user);
+
     if (!user) {
       <Redirect href="/(tabs)" />;
 
       return;
     }
+
+    <Redirect href="/user/home" />;
   }, []);
 
 

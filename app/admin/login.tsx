@@ -53,12 +53,10 @@ export default function AdminLogin() {
         },
       });
 
-      const { token, ...user } = res.data;
-
-      console.log(token);
+      const { token, user } = res.data;
 
 
-      login({...user}, token);
+      login(user, token);
     } catch (error: any) {
       console.error(error.response.data.message);
       toast.show({
