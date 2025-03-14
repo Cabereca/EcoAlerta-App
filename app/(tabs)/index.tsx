@@ -21,8 +21,6 @@ type FieldValues = {
 
 export default function HomePage () {
   const [isShowSplash, setIsShowSplash] = useState(true);
-
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toast = useToast();
@@ -128,6 +126,7 @@ export default function HomePage () {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  type='password'
                 />
               </Input>
 

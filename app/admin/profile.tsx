@@ -31,19 +31,6 @@ const MenuItem = ({
 export default function ProfileScreen() {
   const {user, logout} = useAdminAuth();
 
-  console.log(user);
-
-
-  const handleMyReports = () => {
-    // Navigate to My Reports screen
-    console.log("Navigate to My Reports")
-  }
-
-  const handleEditInfo = () => {
-    // Navigate to Edit Information screen
-    console.log("Navigate to Edit Information")
-  }
-
   const handleLogout = () => {
     logout();
     router.push('/admin/login')
@@ -63,8 +50,6 @@ export default function ProfileScreen() {
         {/* Menu Items */}
         <Box className="mt-4">
           <Divider className="bg-gray-200" />
-          <MenuItem label="Minhas denúncias" onPress={handleMyReports} />
-          <MenuItem label="Alterar informações" onPress={handleEditInfo} />
           <MenuItem label="Sair" onPress={handleLogout} isDestructive />
         </Box>
       </Box>

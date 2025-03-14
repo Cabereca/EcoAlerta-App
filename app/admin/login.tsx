@@ -1,15 +1,17 @@
-
+import Leaf from '@/assets/images/big-leaf.png';
 import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import { Button, ButtonIcon, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
+import { Image } from '@/components/ui/image';
 import { Input, InputField } from '@/components/ui/input';
 import { Toast, ToastDescription, ToastTitle, useToast } from '@/components/ui/toast';
 import { useAdminAuth } from '@/hooks/useAuth';
 import api from '@/services/api';
 import { adminLoginValidationSchema } from '@/utils/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import { ChevronLeft } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -19,7 +21,6 @@ type FieldValues = {
 }
 
 export default function AdminLogin() {
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toast = useToast();
@@ -33,10 +34,7 @@ export default function AdminLogin() {
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-
       const res = await api.post('/employeeLogin', data);
-
-      console.log(data);
 
       toast.show({
         id: Math.random().toString(),
@@ -86,9 +84,14 @@ export default function AdminLogin() {
 
   return (
     <Box className='w-full h-screen flex items-center justify-center'>
-      <Box className='w-full h-screen flex items-center justify-center max-w-md p-16 bg-white rounded-lg shadow-lg'>
-        <Box className='mb-12 w-[138px] h-[138px] bg-gray-100 mx-auto'>
+      <Box className='relative w-full h-screen flex items-center justify-center max-w-md p-16 bg-white rounded-lg shadow-lg'>
+        <Box className='absolute top-4 left-4'>
+          <Button onPress={() => router.navigate("/(tabs)")} variant='link'>
+            <ButtonIcon as={ChevronLeft} />
+            <ButtonText>Voltar</ButtonText>
+          </Button>
         </Box>
+        <Image source={Leaf} alt='Folha' className='mb-12 w-[138px] h-[138px] mx-auto'/>
 
         <Heading className='text-center text-2xl mb-12'>Administrador</Heading>
 
@@ -125,6 +128,7 @@ export default function AdminLogin() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                type='password'
               />
             </Input>
 

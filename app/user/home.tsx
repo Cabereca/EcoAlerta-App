@@ -2,7 +2,7 @@
 
 import { Occurrence } from '@/@types/Occurrence'
 import Leaf from '@/assets/images/big-leaf.png'
-import OccurrenceCard from '@/components/OccurrenceCard'
+import OccurrenceCard from '@/components/OcurrenceCard'
 import { FlatList } from '@/components/Themed'
 import { Avatar } from '@/components/ui/avatar'
 import { Box } from '@/components/ui/box'
@@ -74,22 +74,24 @@ export default function OccurrencesScreen() {
         </HStack>
       </HStack>
 
-      {
-        occurrences && occurrences.length > 0 ? (
-          <FlatList
-            data={occurrences}
-            renderItem={({ item }) => <OccurrenceCard occurrence={item} />}
-            keyExtractor={(item) => item?.id}
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            key={occurrences.length}
-          />
-        ) : (
-          <Center className='flex-1'>
-            <Heading size="md">Nenhuma denúncia encontrada - {occurrences?.length}</Heading>
-          </Center>
-        )
-      }
+      <Box className='flex-1 flex items-center justify-center'>
+        {
+          occurrences && occurrences.length > 0 ? (
+            <FlatList
+              data={occurrences}
+              renderItem={({ item }) => <OccurrenceCard occurrence={item} />}
+              keyExtractor={(item) => item?.id}
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              key={occurrences.length}
+            />
+          ) : (
+            <Center className='flex-1'>
+              <Heading size="md">Nenhuma denúncia encontrada - {occurrences?.length}</Heading>
+            </Center>
+          )
+        }
+      </Box>
 
 
       <Pressable className='absolute right-5 bottom-5 bg-green-500 p-6 rounded-full' onPress={() => navigation.navigate('novaOcorrencia')}>

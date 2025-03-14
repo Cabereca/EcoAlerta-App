@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ScrollView } from 'react-native';
 
 type FieldValues = UserCreate & {
   confirmPassword: string;
@@ -80,13 +81,19 @@ export default function UserRegistro() {
   }
 
   return (
-    <Box className='w-full h-screen flex items-center justify-center'>
-      <Box className='w-full h-screen flex items-center justify-center max-w-md p-16 bg-white rounded-lg shadow-lg'>
-        <Image source={Leaf} alt='Folha' className='mb-12 w-[138px] h-[138px] bg-gray-100 mx-auto'/>
+    <Box className='w-screen flex items-center justify-center bg-white'>
+      <ScrollView contentContainerStyle={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20
+      }} className='w-full max-w-md rounded-lg shadow-lg'
+      >
+        <Image source={Leaf} alt='Folha' className='mb-12 w-[138px] h-[138px] mx-auto'/>
 
         <Heading className='text-center text-4xl mb-12'>Criar conta</Heading>
 
-        <Box className='w-full flex flex-col gap-8'>
+        <Box className='w-full min-h-screen flex flex-col gap-8'>
         <Controller
           control={control}
           rules={{
@@ -179,6 +186,7 @@ export default function UserRegistro() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                type='password'
               />
             </Input>
 
@@ -199,6 +207,7 @@ export default function UserRegistro() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                type='password'
               />
             </Input>
 
@@ -217,13 +226,13 @@ export default function UserRegistro() {
           </Button>
         </Box>
 
-        <Text className='text-center mt-8'>
+        <Text className='text-center'>
           Já possui uma conta?
           <Link href="/(tabs)" style={{ color: 'green'}} className='ml-4 text-sm underline'>
             Faça login
           </Link>
         </Text>
-      </Box>
+      </ScrollView>
     </Box>
   );
 }

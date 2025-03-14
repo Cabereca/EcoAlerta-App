@@ -1,100 +1,76 @@
-import { Occurrence } from '@/@types/Occurrence';
-import { Text } from '@/components/Themed';
-import { Box } from '@/components/ui/box';
-import { HStack } from '@/components/ui/hstack';
-import { Icon } from '@/components/ui/icon';
-import { VStack } from '@/components/ui/vstack';
-import api from '@/services/api';
-import { ChevronDown, SlidersHorizontal } from "lucide-react-native";
-import { useEffect, useState } from 'react';
-import { Pressable, ScrollView } from 'react-native';
+"use client"
 
-type Status = 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
+import type { Occurrence } from "@/@types/Occurrence"
+import { AdminOcurrenceView } from '@/components/AdminOcurrenceView'
+import { Text } from "@/components/Themed"
+import { Box } from "@/components/ui/box"
+import { Heading } from "@/components/ui/heading"
+import { HStack } from "@/components/ui/hstack"
+import { useToast } from "@/components/ui/toast"
+import { VStack } from "@/components/ui/vstack"
+import api from '@/services/api'
+import { useNavigation } from "@react-navigation/native"
+import { useEffect, useState } from "react"
+import { ActivityIndicator, ScrollView } from "react-native"
 
-// Status indicator component
-const StatusIndicator = ({ status }: { status: Status }) => {
-  const colors = {
-    OPEN: "bg-red-500",
-    IN_PROGRESS: "bg-yellow-500",
-    CLOSED: "bg-green-500"
-  }
+export default function AdminOccurrencesScreen() {
+  const navigation = useNavigation()
+  const toast = useToast()
+  const [occurrences, setOccurrences] = useState<Occurrence[]>([])
+  const [loading, setLoading] = useState(true)
 
-  return <Box className={`w-3 h-3 rounded-full ${colors[status]}`} />
-}
-
-// Report item component
-
-const ReportItem = ({ title, status }: {title: string, status: Status}) => {
-  const bgColors = {
-    OPEN: "bg-red-500",
-    IN_PROGRESS: "bg-yellow-50",
-    CLOSED: "bg-green-50"
-  }
-
-  return (
-    <Pressable className={`w-full p-4 border-b border-gray-200 ${bgColors[status]}`}>
-      <HStack className="justify-between items-center">
-        <Text className="text-gray-800 font-medium">{title}</Text>
-        <Icon as={ChevronDown} size="sm" />
-      </HStack>
-    </Pressable>
-  )
-}
-
-export default function ReportsScreen() {
-  const [reports, setReports] = useState<Occurrence[] | undefined>(undefined);
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await api.get('/occurrence/all');
-
-        console.log(res.data);
-
-        setReports(res.data);
-
-      } catch (error) {
-        console.error(error);
-      }
-    })()
+    fetchOccurrences()
   }, [])
 
-  return (
-    <>
-      <Box className="flex-1 bg-green-50">
-        <Box className="p-4 safe-top">
-          {/* Title and Filter */}
-          <HStack className="justify-between items-center mb-4">
-            <Text className="text-lg font-bold text-black">Todas as denúncias</Text>
-            <Pressable>
-              <Icon as={SlidersHorizontal} size="md" />
-            </Pressable>
-          </HStack>
+  const fetchOccurrences = async () => {
+    try {
+      const {data} = await api.get('/occurrence/all')
 
-          {/* Legend */}
-          <VStack className="mb-4">
-            <HStack className="items-center justify-end mb-1">
-              <StatusIndicator status="OPEN" />
-              <Text className="ml-2">Pendente</Text>
-            </HStack>
-            <HStack className="items-center justify-end mb-1">
-              <StatusIndicator status="IN_PROGRESS" />
-              <Text className="ml-2">Em andamento</Text>
-            </HStack>
-            <HStack className="items-center justify-end">
-              <StatusIndicator status="CLOSED" />
-              <Text className="ml-2">Concluída</Text>
-            </HStack>
-          </VStack>
-        </Box>
+      setOccurrences(data)
+    } catch (error) {
+      toast.show({
+        render: () => (
+          <Box className="bg-red-500 p-4 rounded-lg">
+            <Text style={{color: 'white'}}>Não foi possível carregar as denúncias.</Text>
+          </Box>
+        ),
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
 
-        {/* Reports List */}
-        <ScrollView className="flex-1">
-          {reports?.map((report) => (
-            <ReportItem key={report.id} title={report.title} status={report.status} />
-          ))}
-        </ScrollView>
+
+
+  if (loading) {
+    return (
+      <Box className="flex-1 bg-gray-50 justify-center items-center">
+        <ActivityIndicator size="large" color="#22c55e" />
       </Box>
-    </>
+    )
+  }
+
+  return (
+    <Box className="flex-1 bg-gray-50">
+      <HStack className="bg-white p-4 items-center justify-between border-b border-gray-200">
+        <HStack className="items-center space-x-4">
+          <Heading className="text-gray-800 text-lg">Administração de Denúncias</Heading>
+        </HStack>
+      </HStack>
+
+      <ScrollView>
+        <VStack className="p-4 space-y-2">
+          {occurrences.map((occurrence) => (
+            <AdminOcurrenceView
+              key={occurrence.id}
+              occurrence={occurrence}
+              occurrences={occurrences}
+              setOccurrences={setOccurrences}
+            />
+          ))}
+        </VStack>
+      </ScrollView>
+    </Box>
   )
 }
-

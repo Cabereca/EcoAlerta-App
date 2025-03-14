@@ -1,8 +1,9 @@
-
+import Leaf from '@/assets/images/big-leaf.png';
 import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
+import { Image } from '@/components/ui/image';
 import { Input, InputField } from '@/components/ui/input';
 import { Toast, ToastDescription, ToastTitle, useToast } from '@/components/ui/toast';
 import { useAdminAuth } from '@/hooks/useAuth';
@@ -12,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ScrollView } from 'react-native';
 
 type FieldValues = {
   registrationNumber: string;
@@ -85,10 +87,15 @@ export default function AdminRegistro() {
   }
 
   return (
-    <Box className='w-full h-screen flex items-center justify-center'>
-      <Box className='w-full h-screen flex items-center justify-center max-w-md p-16 bg-white rounded-lg shadow-lg'>
-        <Box className='mb-12 w-[138px] h-[138px] bg-gray-100 mx-auto'>
-        </Box>
+    <Box className='w-screen min-h-screen  flex items-center justify-center'>
+      <ScrollView contentContainerStyle={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20
+      }} className='w-full h-screen max-w-md rounded-lg shadow-lg'
+      >
+        <Image source={Leaf} alt='Folha' className='mb-12 w-[138px] h-[138px] mx-auto'/>
 
         <Heading className='text-center text-4xl mb-12'>Criar conta</Heading>
 
@@ -185,6 +192,7 @@ export default function AdminRegistro() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                type='password'
               />
             </Input>
 
@@ -205,6 +213,7 @@ export default function AdminRegistro() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                type='password'
               />
             </Input>
 
@@ -229,7 +238,7 @@ export default function AdminRegistro() {
             Faça login
           </Link>
         </Text>
-      </Box>
+      </ScrollView>
     </Box>
   );
 }
